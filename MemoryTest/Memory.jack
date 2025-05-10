@@ -1,0 +1,55 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Memory.jack
+
+/**
+ * Provides memory access and dynamic allocation support.
+ */
+class Memory {
+    
+    /** Initializes the memory manager. */
+    function void init() {
+        // Store heap pointer in RAM[2047]
+        if (Memory.peek(2047) = 0) {
+            do Memory.poke(2047, 2048);
+        }
+        return;
+    }
+
+    /** Returns the value stored at the given RAM address. */
+    function int peek(int address) {
+        return address[address];
+    }
+
+    /** Stores the value at the specified RAM address. */
+    function void poke(int address, int value) {
+        let address[address] = value;
+        return;
+    }
+
+    /** Allocates a block of memory and returns a reference to its base. */
+    function Array alloc(int size) {
+        var Array block;
+        var int heap;
+
+        let heap = Memory.peek(2047);
+
+        // Initialize heap if not done yet
+        if (heap = 0) {
+            let heap = 2048;
+            do Memory.poke(2047, 2048);
+        }
+
+        let block = heap;
+        do Memory.poke(2047, heap + size);
+
+        return block;
+    }
+
+    /** Deallocates memory block — no-op for basic allocator. */
+    function void deAlloc(Array o) {
+        // Jack spec does not require actual deallocation
+        return;
+    }
+}

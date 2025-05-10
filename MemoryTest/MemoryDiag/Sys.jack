@@ -1,0 +1,60 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Sys.jack
+
+/**
+ * A library that supports various program execution services.
+ */
+class Sys {
+
+    /** Initializes the operating system by calling init routines. */
+    function void init() {
+        do Memory.init();
+        do Math.init();
+        do Screen.init();
+        do Output.init();
+        do Keyboard.init();
+
+        // Call main program if available (uncomment when not running .tst files)
+        // do Main.main();
+        // do Sys.halt();
+
+        return;
+    }
+
+    /** Enters an infinite loop to halt the program execution. */
+    function void halt() {
+        while (true) {}
+        return;
+    }
+
+    /** Waits for approximately the specified number of milliseconds. */
+    function void wait(int duration) {
+        var int outer, inner;
+        let outer = 0;
+
+        if (duration < 0) {
+            do Sys.error(1); // invalid input
+        }
+
+        while (outer < duration) {
+            let inner = 0;
+            while (inner < 200) {
+                let inner = inner + 1;
+            }
+            let outer = outer + 1;
+        }
+
+        return;
+    }
+
+    /** Displays the given error code in the format ERR<code>, then halts. */
+    function void error(int code) {
+        do Output.printString("ERR");
+        do Output.printInt(code);
+        do Output.println();
+        do Sys.halt();
+        return;
+    }
+}
